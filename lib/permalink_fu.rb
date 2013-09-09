@@ -21,7 +21,10 @@ module PermalinkFu
       if Gem::Version.new("#{RUBY_VERSION}") < Gem::Version.new("1.9")
         require 'iconv'
         s = ClassMethods.decode(str)#.force_encoding("UTF-8")
-        s = Iconv.iconv('ascii//ignore//translit', 'utf-8', s).to_s
+        begin
+          s = Iconv.iconv('ascii//ignore//translit', 'utf-8', s).to_s
+        rescue Iconv::InvalidEncoding
+        end
       else
         s = ClassMethods.decode(str).encode("ascii")
       end
